@@ -3,6 +3,8 @@ import { Baloo_2, Nunito } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { LookTracker } from "@/components/cat/look-tracker";
+import { AppEffects } from "@/components/app/app-effects";
+import { Toaster } from "@/components/ui/sonner";
 
 const baloo = Baloo_2({
   subsets: ["latin"],
@@ -27,7 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={cn("h-full antialiased", baloo.variable, nunito.variable)}>
       <body className="min-h-dvh">
         <LookTracker />
+        <AppEffects />
         {children}
+        <Toaster position="top-center" />
       </body>
     </html>
   );

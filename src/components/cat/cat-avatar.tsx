@@ -25,7 +25,7 @@ export function CatAvatar({ look, mood = "idle", head = false, className, label 
       <svg
         viewBox={viewBox}
         xmlns="http://www.w3.org/2000/svg"
-        className="block h-auto w-full overflow-visible"
+        className={cn("block h-auto w-full", head ? "overflow-hidden" : "overflow-visible")}
         role={label ? "img" : undefined}
         aria-label={label}
         aria-hidden={label ? undefined : true}

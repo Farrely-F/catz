@@ -11,6 +11,7 @@ import {
   type Prefs,
   type State,
 } from "./progress.ts";
+import type { CatLook } from "./cat.ts";
 import type { Profile } from "./profile.ts";
 import { dayKey } from "./streak.ts";
 
@@ -71,6 +72,11 @@ export const actions = {
   patchProfile(patch: Partial<Profile>) {
     getSnapshot();
     commit({ ...state, profile: { ...state.profile, ...patch } });
+  },
+  /** Merge look edits against the latest state, so quick taps never overwrite each other. */
+  patchLook(patch: Partial<CatLook>) {
+    getSnapshot();
+    commit({ ...state, profile: { ...state.profile, look: { ...state.profile.look, ...patch } } });
   },
   /** Finish onboarding: lock in the plan's defaults. */
   completeOnboarding() {
