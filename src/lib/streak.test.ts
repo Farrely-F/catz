@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { EMPTY_STREAK, dayKey, daysBetween, liveCount, recordDay, type Streak } from "./streak.ts";
+import { EMPTY_STREAK, dayKey, daysBetween, liveCount, recordDay, streakCovers, weekKeys, type Streak } from "./streak.ts";
 
 const s = (count: number, lastDay: string | null, freezes = 0): Streak => ({ count, lastDay, freezes });
 
@@ -61,4 +61,20 @@ test("liveCount shows a broken streak as 0", () => {
   assert.equal(liveCount(s(4, "2026-05-01", 1), "2026-05-03"), 4);
   assert.equal(liveCount(s(4, "2026-05-01", 0), "2026-05-03"), 0);
   assert.equal(liveCount(s(4, "2026-05-01", 2), "2026-05-04"), 0);
+});
+
+test("weekKeys is Monday to Sunday around the given date", () => {
+  assert.deepEqual(weekKeys(new Date(2026, 4, 6)), ["2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-09", "2026-05-10"]);
+  assert.equal(weekKeys(new Date(2026, 4, 10))[0], "2026-05-04"); // Sunday belongs to the week that started Monday
+  assert.equal(weekKeys(new Date(2026, 4, 4))[6], "2026-05-10");
+  assert.equal(weekKeys(new Date(2026, 0, 1))[0], "2025-12-29"); // crosses the year
+});
+
+test("streakCovers marks the days inside the current run", () => {
+  const a = s(3, "2026-05-06");
+  assert.equal(streakCovers(a, "2026-05-06"), true);
+  assert.equal(streakCovers(a, "2026-05-04"), true);
+  assert.equal(streakCovers(a, "2026-05-03"), false);
+  assert.equal(streakCovers(a, "2026-05-07"), false);
+  assert.equal(streakCovers(EMPTY_STREAK, "2026-05-06"), false);
 });

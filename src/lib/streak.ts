@@ -52,3 +52,16 @@ export function liveCount(s: Streak, today: string): number {
   if (gap === 2 && s.freezes > 0) return s.count;
   return 0;
 }
+
+/** The 7 local dates of the week containing `now`, Monday first. */
+export function weekKeys(now: Date = new Date()): string[] {
+  const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+  return Array.from({ length: 7 }, (_, i) => dayKey(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i)));
+}
+
+/** Whether `day` falls inside the current streak run (ending at lastDay). */
+export function streakCovers(s: Streak, day: string): boolean {
+  if (s.lastDay === null || s.count < 1) return false;
+  const back = daysBetween(day, s.lastDay);
+  return back >= 0 && back < s.count;
+}
