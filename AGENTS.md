@@ -13,3 +13,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Roadmap, PR stack, Phase 2 AI plan: `docs/roadmap.md`
 - Conventions (UI, tokens, avatar, checks, git): `docs/conventions.md`
 - UI reference: `docs/design/catz-design-preview.html` (`npm run design`)
+- PWA, offline, SEO, icons: `docs/pwa-seo.md`

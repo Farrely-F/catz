@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { InstallCard } from "@/components/app/install-card";
 import { CatMascot } from "@/components/cat/cat-mascot";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -65,6 +66,8 @@ export default function CatPage() {
             ))}
           </ul>
         </div>
+
+        <InstallCard />
 
         <Link href="/onboarding/avatar" data-sfx="next" className={buttonVariants({ variant: "outline", className: "w-full" })}>
           Edit cat and plan
