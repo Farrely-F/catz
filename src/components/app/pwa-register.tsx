@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { LESSONS } from "@/lib/curriculum";
+import "@/lib/install-prompt"; // starts listening for beforeinstallprompt on every page
 
 /** Routes cached up front so the whole app opens offline after the first visit. */
 const WARM = [

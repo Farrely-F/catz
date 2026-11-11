@@ -13,7 +13,8 @@ Source of truth for how installability, offline use and search metadata work.
 - Icons come from one mark, `src/lib/brand.ts`. Regenerate everything with `npm run icons`
   (writes `public/icons/*`, `src/app/icon.svg`, `src/app/apple-icon.png`, `src/app/favicon.ico`).
 - A maskable icon keeps the mark inside the safe zone.
-- `InstallCard` (My cat tab) uses `beforeinstallprompt`, and shows Add to Home Screen steps on iOS.
+- `src/lib/install-prompt.ts` captures `beforeinstallprompt` on every page (imported by the root `PwaRegister`),
+  because Chrome fires it once, early. `InstallCard` (My cat tab) reads it, and shows Add to Home Screen steps on iOS.
 
 ## Offline
 
