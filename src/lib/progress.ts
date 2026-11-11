@@ -16,6 +16,9 @@ export type Prefs = {
 export type Win = { id: string; day: string; title: string; note: string; lessonId?: string };
 export type Today = { day: string; rounds: number; treats: number };
 
+/** The most recent finished lesson, shown on the win screen. */
+export type LastResult = { lessonId: string; win: string; xpGain: number; rest: boolean; reps: number; day: string };
+
 /** Everything we persist. Plain JSON so it can sync to a server later. */
 export type State = {
   v: 1;
@@ -27,6 +30,7 @@ export type State = {
   today: Today;
   wins: Win[];
   prefs: Prefs;
+  last: LastResult | null;
 };
 
 export const DEFAULT_PREFS: Prefs = { sound: true, ui: true, focus: true, soft: false, haptic: true };
@@ -42,6 +46,7 @@ export function defaultState(): State {
     today: { day: "", rounds: 0, treats: 0 },
     wins: [],
     prefs: DEFAULT_PREFS,
+    last: null,
   };
 }
 
@@ -54,7 +59,7 @@ export function todayOf(s: State, day: string): Today {
 
 export type Mood = "nailed" | "close" | "rest";
 
-export type FinishInput = { lessonId: string; mood: Mood; win: string };
+export type FinishInput = { lessonId: string; mood: Mood; win: string; reps: number };
 
 /** Apply a finished lesson. A "Not today" rest day keeps the streak but earns little XP and no win. */
 export function finishLesson(s: State, input: FinishInput, day: string, id: string) {
@@ -68,6 +73,7 @@ export function finishLesson(s: State, input: FinishInput, day: string, id: stri
     today: { ...today, rounds: today.rounds + (rest ? 0 : 1) },
     done: !rest && !s.done.includes(input.lessonId) ? [...s.done, input.lessonId] : s.done,
     wins: rest ? s.wins : [{ id, day, title: input.win, note: "", lessonId: input.lessonId }, ...s.wins],
+    last: { lessonId: input.lessonId, win: input.win, xpGain, rest, reps: input.reps, day },
   };
   return { state, xpGain, rest };
 }

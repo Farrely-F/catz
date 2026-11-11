@@ -5,17 +5,18 @@ import { addTreats, defaultState, finishLesson, level, mergeState, todayOf } fro
 const DAY = "2026-05-01";
 
 test("finishing a lesson earns xp, a win, a round and a streak day", () => {
-  const r = finishLesson(defaultState(), { lessonId: "target-touch", mood: "nailed", win: "First target touch" }, DAY, "w1");
+  const r = finishLesson(defaultState(), { lessonId: "target-touch", mood: "nailed", win: "First target touch", reps: 5 }, DAY, "w1");
   assert.equal(r.xpGain, 25);
   assert.equal(r.state.xp, 25);
   assert.deepEqual(r.state.done, ["target-touch"]);
   assert.equal(r.state.wins[0].title, "First target touch");
   assert.equal(r.state.today.rounds, 1);
   assert.equal(r.state.streak.count, 1);
+  assert.deepEqual(r.state.last, { lessonId: "target-touch", win: "First target touch", xpGain: 25, rest: false, reps: 5, day: DAY });
 });
 
 test("a rest day keeps the streak but gives little xp, no win, no round, no progress", () => {
-  const r = finishLesson(defaultState(), { lessonId: "target-touch", mood: "rest", win: "x" }, DAY, "w1");
+  const r = finishLesson(defaultState(), { lessonId: "target-touch", mood: "rest", win: "x", reps: 3 }, DAY, "w1");
   assert.equal(r.rest, true);
   assert.equal(r.xpGain, 5);
   assert.equal(r.state.streak.count, 1);
@@ -25,8 +26,8 @@ test("a rest day keeps the streak but gives little xp, no win, no round, no prog
 });
 
 test("replaying a lesson does not duplicate progress", () => {
-  const a = finishLesson(defaultState(), { lessonId: "sit", mood: "close", win: "First sit" }, DAY, "a").state;
-  const b = finishLesson(a, { lessonId: "sit", mood: "close", win: "First sit" }, DAY, "b").state;
+  const a = finishLesson(defaultState(), { lessonId: "sit", mood: "close", win: "First sit", reps: 5 }, DAY, "a").state;
+  const b = finishLesson(a, { lessonId: "sit", mood: "close", win: "First sit", reps: 5 }, DAY, "b").state;
   assert.deepEqual(b.done, ["sit"]);
   assert.equal(b.streak.count, 1);
 });
