@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { CatAvatar } from "./cat-avatar";
+import { sfx } from "@/lib/audio";
 import type { CatLook } from "@/lib/cat";
 
 type Props = {
@@ -11,7 +12,7 @@ type Props = {
   head?: boolean;
   className?: string;
   label?: string;
-  /** Called on every tap, e.g. to play a meow. */
+  /** Called on every tap, after the meow. */
   onTap?: () => void;
 };
 
@@ -24,6 +25,7 @@ export function CatMascot({ look, mood = "idle", head, className, label, onTap }
   useEffect(() => () => clearTimeout(timer.current), []);
 
   const tap = useCallback(() => {
+    sfx.meow();
     onTap?.();
     setCheer(true);
     setHop(false);
